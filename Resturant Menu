@@ -1,1 +1,97 @@
+npn install :
+
+ npm install react react-dom react-router-dom
+
+JSX :
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
+function Home() {
+  return <h1>Welcome to our Restaurant</h1>;
+}
+
+function Categories({ categories }) {
+  return (
+    <div>
+      <h1>Categories</h1>
+      <ul>
+        {categories.map(category => (
+          <li key={category.id}>
+            <Link to={`/items/${category.id}`}>{category.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Items({ match }) {
+  const categoryId = match.params.categoryId;
+  // Fetch items based on the categoryId from your server or use dummy data
+  const items = [
+    { id: 1, name: 'Item 1' },
+    { id: 2, name: 'Item 2' },
+    { id: 3, name: 'Item 3' }
+  ];
+
+  return (
+    <div>
+      <h1>Items</h1>
+      <ul>
+        {items.map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function App() {
+  // Dummy data for categories
+  const categories = [
+    { id: 1, name: 'Category 1' },
+    { id: 2, name: 'Category 2' },
+    { id: 3, name: 'Category 3' }
+  ];
+
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/categories">Categories</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/categories" render={() => <Categories categories={categories} />} />
+          <Route path="/items/:categoryId" component={Items} />
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+
+index.Js :
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
 
