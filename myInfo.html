@@ -1,0 +1,8 @@
+<h2>My Info</h2>
+<div ng-if="favoriteItem">
+  <h3>Favorite Menu Item</h3>
+  <img ng-src="{{favoriteItem.image}}" alt="{{favoriteItem.name}}">
+  <h4>{{favoriteItem.name}}</h4>
+  <p>{{favoriteItem.description}}</p>
+</div>
+<div ng-if="!favoriteItem">Not Signed Up Yet. <a href="#/signup">Sign up Now!</a></div>
