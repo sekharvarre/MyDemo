@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu Item Search</title>
+  <style>
+    .menu-item {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="searchInput" placeholder="Enter search term">
+  <button onclick="searchMenuItems()">Narrow It Down For Me!</button>
+  <div id="menuItems"></div>
+
+  <script>
+    function searchMenuItems() {
+      var searchInput = document.getElementById('searchInput').value;
+      var menuItemsElement = document.getElementById('menuItems');
+      menuItemsElement.innerHTML = ''; // Clear previous results
+
+      if (searchInput.trim() === '') {
+        menuItemsElement.innerHTML = 'Nothing found';
+        return;
+      }
+
+      fetch('https://my-restaurant-server.com/menu_items')
+        .then(response => response.json())
+        .then(data => {
+          var foundItems = data.menu_items.filter(item => item.description.includes(searchInput));
+          if (foundItems.length === 0) {
+            menuItemsElement.innerHTML = 'Nothing found';
+          } else {
+            var itemList = document.createElement('ul');
+            foundItems.forEach(item => {
+              var itemElement = document.createElement('li');
+              itemElement.className = 'menu-item';
+              itemElement.innerHTML = item.name + ', ' + item.short_name + ', ' + item.description;
+              itemList.appendChild(itemElement);
+
+              var removeButton = document.createElement('button');
+              removeButton.innerHTML = "Don't want this one!";
+              removeButton.onclick = function() {
+                itemList.removeChild(itemElement);
+              };
+              itemElement.appendChild(removeButton);
+            });
+            menuItemsElement.appendChild(itemList);
+          }
+        })
+        .catch(error => {
+          console.log('An error occurred:', error);
+        });
+    }
+  </script>
+</body>
+</html>
